@@ -1,8 +1,12 @@
-package hongik.cartoonforblindbackend.domain.user;
+package hongik.cartoonforblindbackend.domain.user.entity;
 
 import hongik.cartoonforblindbackend.domain.book.Book;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -10,6 +14,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -34,8 +39,11 @@ public class User {
   @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false)
-  private String nickname;
+  @Column
+  private String username;
+
+  @Column(nullable = true)
+  private String password;
 
   private String profileImage;
 
@@ -50,6 +58,10 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<Book> books;
 
-//  @OneToMany(mappedBy = "user")
+  @Column(nullable = false)
+  @Enumerated(value = EnumType.STRING)
+  private UserRoleEnum role;
+
+  //  @OneToMany(mappedBy = "user")
 //  private List<UserSocial> userSocials;
 }
