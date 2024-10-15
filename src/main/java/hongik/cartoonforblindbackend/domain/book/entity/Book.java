@@ -1,7 +1,9 @@
-package hongik.cartoonforblindbackend.domain.book;
+package hongik.cartoonforblindbackend.domain.book.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import hongik.cartoonforblindbackend.domain.book.dto.BookCreateRequestDto;
 import hongik.cartoonforblindbackend.domain.page.Page;
-import hongik.cartoonforblindbackend.domain.user.User;
+import hongik.cartoonforblindbackend.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -49,8 +51,19 @@ public class Book {
 
   @ManyToOne
   @JoinColumn(name = "user_id", nullable = false)
+  @JsonIgnore
   private User user;
 
   @OneToMany(mappedBy = "book")
   private List<Page> pages;
+
+  public Book(BookCreateRequestDto dto, User user){
+    this.author = dto.getAuthor();
+    this.coverImage = dto.getCoverImage();
+    this.title = dto.getTitle();
+    this.lastPageNumber = 0;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+    this.user = user;
+  }
 }
