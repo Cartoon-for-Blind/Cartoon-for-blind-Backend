@@ -18,7 +18,10 @@ public enum ErrorCode {
   AUTHENTICATION_EXCEPTION("로그인하고 이용해주세요."),
   INVALID_TOKEN_EXCEPTION("유효하지 않은 토큰 입니다."),
   AUTHENTICATION_MISMATCH_EXCEPTION("권한이 없습니다."),
-  LOGIN_REQUIRED_EXCEPTION("리프레시 토큰 문제 있으니 다시 로그인 해주세요.");
+  LOGIN_REQUIRED_EXCEPTION("리프레시 토큰 문제 있으니 다시 로그인 해주세요."),
+
+  // book
+  NOT_FOUND_BOOK("해당 책을 찾을 수 없습니다.");
 
 
 
