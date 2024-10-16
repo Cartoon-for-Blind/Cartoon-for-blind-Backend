@@ -46,7 +46,7 @@ public class BookService {
   }
 
   public String saveBookCover(MultipartFile file,String username, String title) throws IOException {
-    // 경로 설정: username/bookname/파일이름
+    // 경로 설정: username/title/coverImage
     String directoryStructure = username + "/" + title + "/";
     String fileName = directoryStructure + "coverImage";
 
