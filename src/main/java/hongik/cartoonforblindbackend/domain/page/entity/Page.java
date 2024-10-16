@@ -1,7 +1,7 @@
 package hongik.cartoonforblindbackend.domain.page.entity;
 
 import hongik.cartoonforblindbackend.domain.book.entity.Book;
-import hongik.cartoonforblindbackend.domain.panel.Panel;
+import hongik.cartoonforblindbackend.domain.panel.entity.Panel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

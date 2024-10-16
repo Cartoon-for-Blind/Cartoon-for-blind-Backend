@@ -22,7 +22,8 @@ public enum ErrorCode {
 
   // book
   NOT_FOUND_BOOK("해당 책을 찾을 수 없습니다."),
-  NOT_FOUND_PAGE("해당 페이지를 찾을 수 없습니다.");
+  NOT_FOUND_PAGE("해당 페이지를 찾을 수 없습니다."),
+  NOT_FOUND_PANEL("해당 판넬을 팢을 수 없습니다.");
 
 
 
