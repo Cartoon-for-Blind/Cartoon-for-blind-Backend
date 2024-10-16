@@ -1,6 +1,6 @@
-package hongik.cartoonforblindbackend.domain.page;
+package hongik.cartoonforblindbackend.domain.page.entity;
 
-import hongik.cartoonforblindbackend.domain.book.Book;
+import hongik.cartoonforblindbackend.domain.book.entity.Book;
 import hongik.cartoonforblindbackend.domain.panel.Panel;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

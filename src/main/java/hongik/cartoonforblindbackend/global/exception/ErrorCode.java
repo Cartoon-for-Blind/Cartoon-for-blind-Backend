@@ -21,7 +21,8 @@ public enum ErrorCode {
   LOGIN_REQUIRED_EXCEPTION("리프레시 토큰 문제 있으니 다시 로그인 해주세요."),
 
   // book
-  NOT_FOUND_BOOK("해당 책을 찾을 수 없습니다.");
+  NOT_FOUND_BOOK("해당 책을 찾을 수 없습니다."),
+  NOT_FOUND_PAGE("해당 페이지를 찾을 수 없습니다.");
 
 
 
