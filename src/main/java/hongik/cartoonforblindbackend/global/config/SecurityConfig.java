@@ -50,33 +50,15 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-    http.csrf((csrf) -> csrf.disable());
 
-    http.sessionManagement((sessionManagement) ->
-        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-    );
-
-    http.authorizeHttpRequests((authorizeHttpRequests) ->
-        authorizeHttpRequests
-            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-            .requestMatchers("/login").permitAll()
-            .requestMatchers("/signup").permitAll()
-            .requestMatchers("/api/user/**").permitAll()
-            .requestMatchers("/api/team/**").permitAll()
-            .requestMatchers("/api/post/**").permitAll()
-            .requestMatchers("/api/chat/**").permitAll()
-            .anyRequest().authenticated()
-    );
-
-//        http.formLogin((formLogin) ->
-//                formLogin
-//                        .loginPage("/login").permitAll()
-//        );
-
-    http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+    http
+        .csrf(csrf -> csrf.disable())  // New way to disable CSRF
+        .authorizeHttpRequests(authorize -> authorize
+            .anyRequest().permitAll());  // Allow all requests without authentication
 
     return http.build();
   }
+
 
   // 비회원에게 허용되지 않은 API를 사용할 때 예외처리
   @Bean

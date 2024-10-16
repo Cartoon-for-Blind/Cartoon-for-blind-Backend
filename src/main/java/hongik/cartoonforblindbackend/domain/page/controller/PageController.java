@@ -34,6 +34,11 @@ public class PageController {
     return ResponseEntity.ok(ApiResponse.ok("Page 생성 성공", null));
   }
 
+//  @PostMapping("/upload/{bookId}")
+//  public ResponseEntity<?> uploadPage(@PathVariable Long bookId, @RequestPart ){
+//
+//  }
+
   @GetMapping("/search/{bookId}/{pageNumber}")
   public ResponseEntity<?> searchPage(@AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable Long bookId, @PathVariable Long pageNumber) {
