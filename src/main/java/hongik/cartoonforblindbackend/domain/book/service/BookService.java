@@ -13,6 +13,7 @@ import hongik.cartoonforblindbackend.global.exception.BusinessException;
 import hongik.cartoonforblindbackend.global.exception.ErrorCode;
 import jakarta.transaction.Transactional;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -45,17 +46,20 @@ public class BookService {
     bookRepository.save(book);
   }
 
-  public String saveBookCover(MultipartFile file,String username, String title) throws IOException {
+  public String saveBookCover(File file, String username, String title) throws IOException {
     // 경로 설정: username/title/coverImage
     String directoryStructure = username + "/" + title + "/";
     String fileName = directoryStructure + "coverImage";
 
-    ObjectMetadata metadata= new ObjectMetadata();
-    metadata.setContentType(file.getContentType());
-    metadata.setContentLength(file.getSize());
+    // 파일의 메타데이터 설정
+    ObjectMetadata metadata = new ObjectMetadata();
+    metadata.setContentType("image/jpeg");  // 파일의 MIME 타입을 설정
+    metadata.setContentLength(file.length());
 
-    // S3에 파일 업로드
-    amazonS3.putObject(new PutObjectRequest(bucketName, fileName, file.getInputStream(),metadata));
+    // 파일을 S3에 업로드
+    try (FileInputStream inputStream = new FileInputStream(file)) {
+      amazonS3.putObject(new PutObjectRequest(bucketName, fileName, inputStream, metadata));
+    }
 
     // S3에서 파일의 URL 생성
     return amazonS3.getUrl(bucketName, fileName).toString();

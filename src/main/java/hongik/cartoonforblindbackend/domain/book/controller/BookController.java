@@ -5,6 +5,7 @@ import hongik.cartoonforblindbackend.domain.book.entity.Book;
 import hongik.cartoonforblindbackend.domain.book.service.BookService;
 import hongik.cartoonforblindbackend.global.response.ApiResponse;
 import hongik.cartoonforblindbackend.global.security.userDetails.UserDetailsImpl;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +29,9 @@ private final BookService bookService;
   @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<?> createBook(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestPart("bookInfo") BookCreateRequestDto dto,
-      @RequestPart("bookCoverImage") MultipartFile file) throws IOException {
+      @RequestPart("bookInfo") BookCreateRequestDto dto) throws IOException {
+
+    File file = new File("src/main/java/hongik/cartoonforblindbackend/global/img.png");
 
     // username과 bookName 가져오기
     String username = userDetails.getUsername();
