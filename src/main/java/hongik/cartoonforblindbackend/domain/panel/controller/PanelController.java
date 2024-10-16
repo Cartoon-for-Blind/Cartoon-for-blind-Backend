@@ -3,7 +3,6 @@ package hongik.cartoonforblindbackend.domain.panel.controller;
 
 import hongik.cartoonforblindbackend.domain.panel.dto.PanelRequestDto;
 import hongik.cartoonforblindbackend.domain.panel.service.PanelService;
-import hongik.cartoonforblindbackend.domain.user.entity.User;
 import hongik.cartoonforblindbackend.global.response.ApiResponse;
 import hongik.cartoonforblindbackend.global.security.userDetails.UserDetailsImpl;
 import java.io.IOException;
@@ -13,10 +12,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,9 +29,6 @@ public class PanelController {
       @RequestPart PanelRequestDto panelRequestDto, @RequestPart
   MultipartFile panelImage, @PathVariable Long bookId, @PathVariable Long pageId)
       throws IOException {
-    String description = panelRequestDto.getDescription();
-    String conversation= panelRequestDto.getConversation();
-    Integer panelNumber = panelRequestDto.getPanelNumber();
     // 컷 이미지를 S3에 저장
     String imageUrl = panelService.savePanelImage(panelImage,userDetails.getUsername(), bookId, pageId);
 
@@ -52,6 +46,4 @@ public class PanelController {
     panelService.deletePanel(userDetails.getUser(),panelId);
     return ResponseEntity.ok(ApiResponse.ok("Panel 삭제 완료", null));
   }
-
-
 }

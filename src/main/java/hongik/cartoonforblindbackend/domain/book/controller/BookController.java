@@ -1,8 +1,8 @@
 package hongik.cartoonforblindbackend.domain.book.controller;
 
 import hongik.cartoonforblindbackend.domain.book.dto.BookCreateRequestDto;
-import hongik.cartoonforblindbackend.domain.book.service.BookService;
 import hongik.cartoonforblindbackend.domain.book.entity.Book;
+import hongik.cartoonforblindbackend.domain.book.service.BookService;
 import hongik.cartoonforblindbackend.global.response.ApiResponse;
 import hongik.cartoonforblindbackend.global.security.userDetails.UserDetailsImpl;
 import java.io.IOException;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
