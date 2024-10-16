@@ -14,7 +14,11 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 public class BookCreateRequestDto{
-  private String coverImage;
+  private String coverImageUrl;
   private String title;
   private String author;
+
+  public void setCoverImageUrl(String imageUrl) {
+    this.coverImageUrl = imageUrl;
+  }
 }

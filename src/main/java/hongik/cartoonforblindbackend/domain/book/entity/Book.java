@@ -2,7 +2,7 @@ package hongik.cartoonforblindbackend.domain.book.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hongik.cartoonforblindbackend.domain.book.dto.BookCreateRequestDto;
-import hongik.cartoonforblindbackend.domain.page.Page;
+import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,7 +32,7 @@ public class Book {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long bookId;
 
-  private String coverImage;
+  private String coverImageUrl;
 
   @Column(nullable = false)
   private String title;
@@ -59,7 +59,7 @@ public class Book {
 
   public Book(BookCreateRequestDto dto, User user){
     this.author = dto.getAuthor();
-    this.coverImage = dto.getCoverImage();
+    this.coverImageUrl = dto.getCoverImageUrl();
     this.title = dto.getTitle();
     this.lastPageNumber = 0;
     this.createdAt = new Date();
