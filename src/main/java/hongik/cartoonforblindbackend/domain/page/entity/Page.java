@@ -1,5 +1,6 @@
 package hongik.cartoonforblindbackend.domain.page.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hongik.cartoonforblindbackend.domain.book.entity.Book;
 import hongik.cartoonforblindbackend.domain.panel.entity.Panel;
 import jakarta.persistence.Column;
@@ -45,5 +46,6 @@ public class Page {
 
   @ManyToOne
   @JoinColumn(name = "book_id", nullable = false)
+  @JsonIgnore
   private Book book;
 }

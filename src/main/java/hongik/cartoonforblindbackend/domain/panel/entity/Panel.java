@@ -1,5 +1,6 @@
 package hongik.cartoonforblindbackend.domain.panel.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.panel.dto.PanelRequestDto;
 import jakarta.persistence.Column;
@@ -37,8 +38,6 @@ public class Panel {
   @Column
   private Integer panelNumber;
 
-  @Column
-  private String panelImageUrl;
 
   @Column(name = "created_at", nullable = false)
   @Temporal(TemporalType.TIMESTAMP)
@@ -50,13 +49,15 @@ public class Panel {
 
   @ManyToOne
   @JoinColumn(name = "page_id", nullable = false)
+  @JsonIgnore
   private Page page;
 
   public Panel(PanelRequestDto panelRequestDto, Page page) {
-    this.panelImageUrl = panelRequestDto.getPanelImageUrl();
     this.conversation = panelRequestDto.getConversation();
-    this.description = panelRequestDto.getConversation();
+    this.description = panelRequestDto.getDescription();
     this.panelNumber = panelRequestDto.getPanelNumber();
     this.page =page;
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
   }
 }

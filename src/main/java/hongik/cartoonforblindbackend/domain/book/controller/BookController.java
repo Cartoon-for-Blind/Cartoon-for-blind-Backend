@@ -95,6 +95,7 @@ private final UserRepository userRepository;
         ErrorCode.AUTHENTICATION_EXCEPTION));
 
     List<Book> bookList = bookService.searchBooks(user);
+    System.out.println("bookList = " + bookList);
     return ResponseEntity.ok(ApiResponse.ok("책들 검색 완료", bookList));
   }
 
