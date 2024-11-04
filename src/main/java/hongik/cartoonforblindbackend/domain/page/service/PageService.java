@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.cartoonforblindbackend.domain.book.entity.Book;
 import hongik.cartoonforblindbackend.domain.book.repository.BookRepository;
 import hongik.cartoonforblindbackend.domain.page.dto.UploadResponseDto;
-import hongik.cartoonforblindbackend.domain.page.dto.UploadResponseDto.PanelData;
 import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.page.repository.PageRepository;
 import hongik.cartoonforblindbackend.domain.panel.dto.PanelRequestDto;
@@ -20,7 +19,6 @@ import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -43,7 +41,7 @@ public class PageService {
   private final PanelService panelService;
 
   private final RestTemplate restTemplate = new RestTemplate();
-  private final String uploadUrl = "https://0670-203-249-67-79.ngrok-free.app//upload"; // 외부 API 엔드포인트
+  private final String uploadUrl = "https://90f4-218-52-169-79.ngrok-free.app/upload"; // 외부 API 엔드포인트
 
 
   public List<Page> searchPage(User user, Long bookId, Long pageNumber) {
@@ -98,8 +96,8 @@ public class PageService {
       // 파일 내용을 ByteArrayResource로 저장
       byte[] fileContent = file.getBytes(); // 파일의 바이트 배열
       String originalFileName = file.getOriginalFilename();
-      String newFileName = UUID.randomUUID().toString() + "_" + originalFileName; // 랜덤한 UUID와 원래 파일 이름 결합
-
+      String newFileName =
+          UUID.randomUUID().toString() + "_" + originalFileName; // 랜덤한 UUID와 원래 파일 이름 결합
 
       // ByteArrayResource 사용
       ByteArrayResource byteArrayResource = new ByteArrayResource(fileContent) {
@@ -115,33 +113,35 @@ public class PageService {
       HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
       // 4. POST 요청 전송
-      ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.POST, requestEntity, String.class);
-
+      ResponseEntity<String> response = restTemplate.exchange(uploadUrl, HttpMethod.POST,
+          requestEntity, String.class);
 
       // 5. 응답 처리
       if (response.getStatusCode() == HttpStatus.OK) {
         System.out.println("이미지 변환 성공: " + response.getBody());
 
         ObjectMapper objectMapper = new ObjectMapper();
-        // JSON 배열을 List<UploadResponseDto.PanelData>로 역직렬화
-        List<UploadResponseDto.PanelData> uploadResponse = objectMapper.readValue(response.getBody(), new TypeReference<List<UploadResponseDto.PanelData>>() {});
+        // JSON 응답을 List<UploadResponseDto.PanelData>로 역직렬화
+        List<UploadResponseDto.PanelData> uploadResponse = objectMapper.readValue(response.getBody(),
+            new TypeReference<List<UploadResponseDto.PanelData>>() {});
 
         // 데이터 저장 및 처리
         for (UploadResponseDto.PanelData panelData : uploadResponse) {
           String description = panelData.getDescription();
-          List<UploadResponseDto.PanelData.Dialogue> dialogueList = panelData.getDialogues();
+          List<String> dialogueList = panelData.getDialogues(); // List<String>으로 변경
           StringBuilder conversation = new StringBuilder();
 
           // 각 대화 내용을 StringBuilder에 추가
-          for (UploadResponseDto.PanelData.Dialogue dialogue : dialogueList) {
-            conversation.append(dialogue.getCharacter()).append(": ").append(dialogue.getCharacter()).append("\n");
+          for (String dialogue : dialogueList) {
+            conversation.append(dialogue).append("\n"); // 대화만 추가
           }
 
           int panelNumber = panelData.getPanelIndex();
 
           // 페이지 생성
           Long pageId = createPage(user, bookId);
-          PanelRequestDto panelRequestDto = new PanelRequestDto(description, conversation.toString(), panelNumber);
+          PanelRequestDto panelRequestDto = new PanelRequestDto(description,
+              conversation.toString(), panelNumber);
           panelService.createPanel(user, panelRequestDto, pageId);
         }
       } else {
