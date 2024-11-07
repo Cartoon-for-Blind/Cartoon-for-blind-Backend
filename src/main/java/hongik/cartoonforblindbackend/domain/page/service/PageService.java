@@ -41,7 +41,7 @@ public class PageService {
   private final PanelService panelService;
 
   private final RestTemplate restTemplate = new RestTemplate();
-  private final String uploadUrl = "https://90f4-218-52-169-79.ngrok-free.app/upload"; // 외부 API 엔드포인트
+  private final String uploadUrl = "https://caring-poetic-reptile.ngrok-free.app/upload"; // 외부 API 엔드포인트
 
 
   public List<Page> searchPage(User user, Long bookId, Long pageNumber) {
