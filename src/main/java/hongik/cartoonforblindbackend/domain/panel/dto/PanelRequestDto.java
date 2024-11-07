@@ -7,7 +7,6 @@ import lombok.Data;
 @AllArgsConstructor
 public class PanelRequestDto {
   private String description;
-  private String conversation;
   private Integer panelNumber;
 
 }

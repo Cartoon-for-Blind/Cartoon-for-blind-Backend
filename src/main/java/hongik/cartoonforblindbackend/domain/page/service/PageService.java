@@ -5,10 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hongik.cartoonforblindbackend.domain.book.entity.Book;
 import hongik.cartoonforblindbackend.domain.book.repository.BookRepository;
+import hongik.cartoonforblindbackend.domain.dialogue.entity.Dialogue;
+import hongik.cartoonforblindbackend.domain.dialogue.repository.DialogueRepository;
 import hongik.cartoonforblindbackend.domain.page.dto.UploadResponseDto;
 import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.page.repository.PageRepository;
 import hongik.cartoonforblindbackend.domain.panel.dto.PanelRequestDto;
+import hongik.cartoonforblindbackend.domain.panel.entity.Panel;
+import hongik.cartoonforblindbackend.domain.panel.repository.PanelRepository;
 import hongik.cartoonforblindbackend.domain.panel.service.PanelService;
 import hongik.cartoonforblindbackend.domain.user.entity.User;
 import hongik.cartoonforblindbackend.domain.user.repository.UserRepository;
@@ -16,6 +20,7 @@ import hongik.cartoonforblindbackend.global.exception.BusinessException;
 import hongik.cartoonforblindbackend.global.exception.ErrorCode;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -38,7 +43,9 @@ public class PageService {
   private final PageRepository pageRepository;
   private final BookRepository bookRepository;
   private final UserRepository userRepository;
+  private final PanelRepository panelRepository;
   private final PanelService panelService;
+  private final DialogueRepository dialogueRepository;
 
   private final RestTemplate restTemplate = new RestTemplate();
   private final String uploadUrl = "https://caring-poetic-reptile.ngrok-free.app/upload"; // 외부 API 엔드포인트
@@ -49,7 +56,7 @@ public class PageService {
     return null;
   }
 
-  public Long createPage(User user, Long bookId) {
+  public Page createPage(User user, Long bookId) {
     Book book = bookRepository.findById(bookId)
         .orElseThrow(() -> new RuntimeException("Book not found"));
 
@@ -68,7 +75,7 @@ public class PageService {
         .build();
 
     pageRepository.save(newPage);
-    return newPage.getPageId();
+    return newPage;
   }
 
   public void deletePage(Long pageId) {
@@ -84,6 +91,9 @@ public class PageService {
     User user = userRepository.findByUserId(userId)
         .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND,
             ErrorCode.AUTHENTICATION_EXCEPTION));
+
+    Book book = bookRepository.findByBookId(bookId)
+        .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, ErrorCode.NOT_FOUND_BOOK));
 
     try {
       // 1. 헤더 설정
@@ -119,30 +129,35 @@ public class PageService {
       // 5. 응답 처리
       if (response.getStatusCode() == HttpStatus.OK) {
         System.out.println("이미지 변환 성공: " + response.getBody());
+        Page page = createPage(user,bookId);
+        pageRepository.save(page);
 
         ObjectMapper objectMapper = new ObjectMapper();
         // JSON 응답을 List<UploadResponseDto.PanelData>로 역직렬화
-        List<UploadResponseDto.PanelData> uploadResponse = objectMapper.readValue(response.getBody(),
-            new TypeReference<List<UploadResponseDto.PanelData>>() {});
+        List<UploadResponseDto.PanelData> uploadResponse = objectMapper.readValue(
+            response.getBody(),
+            new TypeReference<List<UploadResponseDto.PanelData>>() {
+            });
 
         // 데이터 저장 및 처리
         for (UploadResponseDto.PanelData panelData : uploadResponse) {
-          String description = panelData.getDescription();
-          List<String> dialogueList = panelData.getDialogues(); // List<String>으로 변경
-          StringBuilder conversation = new StringBuilder();
+          List<Map<String, String>> dialogues = panelData.getDialogues();// List<String>으로 변경
+          PanelRequestDto panelRequestDto = new PanelRequestDto(panelData.getDescription(),
+              panelData.getPanelIndex());
 
-          // 각 대화 내용을 StringBuilder에 추가
-          for (String dialogue : dialogueList) {
-            conversation.append(dialogue).append("\n"); // 대화만 추가
+          String threadId = panelData.getThreadId();
+          book.setThread(threadId);
+          Panel panel = new Panel(panelRequestDto, page);
+          panelRepository.save(panel);
+
+          for (Map<String, String> dialogue : dialogues) {
+            for (Map.Entry<String, String> entry : dialogue.entrySet()) { // Map 내 key, value에 대해 반복
+              String key = entry.getKey();     // key: 대화자 이름
+              String value = entry.getValue(); // value: 대화 내용
+              Dialogue newDialogue = new Dialogue(key, value, panel);
+              dialogueRepository.save(newDialogue);
+            }
           }
-
-          int panelNumber = panelData.getPanelIndex();
-
-          // 페이지 생성
-          Long pageId = createPage(user, bookId);
-          PanelRequestDto panelRequestDto = new PanelRequestDto(description,
-              conversation.toString(), panelNumber);
-          panelService.createPanel(user, panelRequestDto, pageId);
         }
       } else {
         System.out.println("변환 실패, 상태 코드: " + response.getStatusCode());

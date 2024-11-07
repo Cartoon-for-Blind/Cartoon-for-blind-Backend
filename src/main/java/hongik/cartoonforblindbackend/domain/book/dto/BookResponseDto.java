@@ -1,5 +1,6 @@
 package hongik.cartoonforblindbackend.domain.book.dto;
 
+import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +14,5 @@ public class BookResponseDto {
   private String bookCoverImageUrl;
   private String title;
   private String author;
-  private Integer lastPageNumber;
-  List<ScriptDto> scriptDtoList;
+  List<Page> PageList;
 }

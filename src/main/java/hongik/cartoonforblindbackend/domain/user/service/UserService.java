@@ -29,8 +29,10 @@ public class UserService {
   private final JwtUtil jwtUtil;
   public void signup(SignupRequestDto requestDto) {
     UserRoleEnum role = UserRoleEnum.USER;
+    System.out.println(requestDto);
 
     User user = requestDto.toEntity(passwordEncoder.encode(requestDto.password()), role);
+    System.out.println(user.getUsername());
 
     userRepository.save(user);
   }

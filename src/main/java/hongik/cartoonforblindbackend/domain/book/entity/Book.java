@@ -39,7 +39,7 @@ public class Book {
 
   private String author;
 
-  private Integer lastPageNumber;
+  private String thread;
 
   @Column(name = "created_at")
   @Temporal(TemporalType.TIMESTAMP)
@@ -61,7 +61,6 @@ public class Book {
     this.author = dto.getAuthor();
     this.coverImageUrl = dto.getCoverImageUrl();
     this.title = dto.getTitle();
-    this.lastPageNumber = 0;
     this.createdAt = new Date();
     this.updatedAt = new Date();
     this.user = user;
