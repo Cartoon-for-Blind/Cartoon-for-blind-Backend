@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hongik.cartoonforblindbackend.domain.book.dto.BookCreateRequestDto;
 import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.user.entity.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class Book {
 
   private String author;
 
-  private String thread;
+  private String thread = "0";
 
   @Column(name = "created_at")
   @Temporal(TemporalType.TIMESTAMP)
@@ -54,7 +55,7 @@ public class Book {
   @JsonIgnore
   private User user;
 
-  @OneToMany(mappedBy = "book")
+  @OneToMany(mappedBy = "book", cascade = CascadeType.REMOVE)
   private List<Page> pages;
 
   public Book(BookCreateRequestDto dto, User user){
