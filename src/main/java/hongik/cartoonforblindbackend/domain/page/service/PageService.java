@@ -95,6 +95,7 @@ public class PageService {
     Book book = bookRepository.findByBookId(bookId)
         .orElseThrow(() -> new BusinessException(HttpStatus.NOT_FOUND, ErrorCode.NOT_FOUND_BOOK));
 
+    book.setUpdatedAt(new Date());
     try {
       // 1. 헤더 설정
       HttpHeaders headers = new HttpHeaders();
@@ -118,6 +119,7 @@ public class PageService {
       };
 
       body.add("file", byteArrayResource); // 변경된 파일 이름으로 파일 추가
+      body.add("thread_id",book.getThread());
 
       // 3. HttpEntity 생성 (headers와 body 결합)
       HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
@@ -153,7 +155,14 @@ public class PageService {
           for (Map<String, String> dialogue : dialogues) {
             for (Map.Entry<String, String> entry : dialogue.entrySet()) { // Map 내 key, value에 대해 반복
               String key = entry.getKey();     // key: 대화자 이름
+              if(key.equals("Unknown")){
+                key = " ";
+              }
               String value = entry.getValue(); // value: 대화 내용
+              if(value.equals("[No dialogue]")){
+                key = " ";
+                value = "없음.";
+              }
               Dialogue newDialogue = new Dialogue(key, value, panel);
               dialogueRepository.save(newDialogue);
             }
