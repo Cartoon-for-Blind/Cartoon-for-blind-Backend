@@ -10,9 +10,10 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class BookResponseDto {
+
   private Long bookId;
   private String bookCoverImageUrl;
   private String title;
   private String author;
-  List<Page> PageList;
+  List<ScriptDto> scriptDtoList;
 }
