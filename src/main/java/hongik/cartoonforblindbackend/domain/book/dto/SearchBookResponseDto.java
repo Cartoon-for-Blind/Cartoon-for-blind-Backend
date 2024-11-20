@@ -13,11 +13,12 @@ public class SearchBookResponseDto {
   private String bookCoverImageUrl;
   private String title;
   private String author;
+  private String updatedAt;
 
-  public SearchBookResponseDto(Book book) {
+  public SearchBookResponseDto(Book book,String updatedAt) {
     this.bookId = book.getBookId();
-    this.bookCoverImageUrl = book.getCoverImageUrl();
     this.title = book.getTitle();
     this.author = book.getAuthor();
+    this.updatedAt = updatedAt;
   }
 }
