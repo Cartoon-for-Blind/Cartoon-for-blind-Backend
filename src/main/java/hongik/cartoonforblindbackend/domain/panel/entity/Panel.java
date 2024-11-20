@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hongik.cartoonforblindbackend.domain.dialogue.entity.Dialogue;
 import hongik.cartoonforblindbackend.domain.page.entity.Page;
 import hongik.cartoonforblindbackend.domain.panel.dto.PanelRequestDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -53,7 +54,7 @@ public class Panel {
   @JsonIgnore
   private Page page;
 
-  @OneToMany(mappedBy = "panel")
+  @OneToMany(mappedBy = "panel",cascade = CascadeType.REMOVE)
   private List<Dialogue> dialogues;
 
   public Panel(PanelRequestDto panelRequestDto, Page page) {
