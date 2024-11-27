@@ -5,7 +5,7 @@ FROM eclipse-temurin:17-jdk-alpine
 WORKDIR /app
 
 # 3. 애플리케이션 JAR 복사
-COPY target/Cartoon-for-Blind-Backend.jar app.jar
+COPY build/libs/Cartoon-for-Blind-Backend.jar app.jar
 
 # 4. 컨테이너 시작 시 실행할 명령어 정의
 ENTRYPOINT ["java", "-jar", "app.jar"]
