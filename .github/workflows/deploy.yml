@@ -36,15 +36,20 @@ jobs:
 
 
 
-    # Docker build & Push 
-    - name: Docker build & push to Docker hub
-      env:
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-        docker build -t $DOCKER_USERNAME/docker-test:latest .
-        docker push $DOCKER_USERNAME/docker-test:latest
+   # 3. Docker 이미지 빌드
+    - name: docker image build
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo .
+
+    # 4. DockerHub 로그인
+    - name: docker login
+      uses: docker/login-action@v2
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_PASSWORD }}
+
+    # 5. Docker Hub 이미지 푸시
+    - name: docker Hub push
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/github-actions-demo
         
     # EC2 배포
     - name: Docker image pull & Deploy to EC2
