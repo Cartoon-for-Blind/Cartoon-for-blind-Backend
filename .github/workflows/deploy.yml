@@ -30,7 +30,7 @@ jobs:
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
         S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
-        JWT_SECRETE: ${{ secrets.JWT_SECRET }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
       run: ./gradlew build
 
     - name: Docker build & push to Docker hub
@@ -51,6 +51,6 @@ jobs:
         script: |
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
           sudo docker stop $(sudo docker ps -a -q)
-          sudo docker run -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
           sudo docker rm $(sudo docker ps --filter 'status=exited' -a -q)
+          sudo docker run --restart unless-stopped -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
           sudo docker image prune -a -f
