@@ -39,9 +39,9 @@ jobs:
     # Docker build & Push 
     - name: Docker build & push to Docker hub
       run: |
-        echo ${{ DOCKER_PASSWORD }} | docker login -u ${{ DOCKER_USERNAME }} --password-stdin
-        docker build -t ${{ DOCKER_USERNAME }}/docker-test:latest
-        docker push ${{ DOCKER_USERNAME }}/docker-test:latest
+        docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+        docker build -f Dockerfile-dev -t ${{ secrets.DOCKER_USERNAME }}/docker-cartoon.
+        docker push ${{ secrets.DOCKER_USERNAME }}/docker-cartoon
 
     # EC2 배포
     - name: Docker image pull & Deploy to EC2
