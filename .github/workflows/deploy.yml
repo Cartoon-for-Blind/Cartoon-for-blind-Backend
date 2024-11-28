@@ -24,7 +24,7 @@ jobs:
 
     - name: Debug secrets
       run: |
-        echo "Docker Username: ${{ secrets.DOCKER_USERNAME }}"
+        echo "Docker Username: ${{ secrets.asd.DOCKER_USERNAME }}"
 
     - name: Build with Gradle Wrapper
       env: 
