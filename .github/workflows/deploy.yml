@@ -52,5 +52,12 @@ jobs:
           sudo docker pull ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
           sudo docker stop $(sudo docker ps -a -q)
           sudo docker rm $(sudo docker ps --filter 'status=exited' -a -q)
-          sudo docker run --restart unless-stopped -d --log-driver=syslog -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
+          sudo docker run --restart unless-stopped -d \
+          -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          -e DB_URL=${{ secrets.DB_URL }} \
+          -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+          -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+          -e S3_ACCESSKEY=${{ secrets.S3_ACCESSKEY }} \
+          -e S3_SECRETKEY=${{ secrets.S3_SECRETKEY }} \
+          -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/docker-test:latest
           sudo docker image prune -a -f
