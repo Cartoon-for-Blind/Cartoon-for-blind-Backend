@@ -37,7 +37,9 @@ jobs:
         S3_ACCESSKEY: ${{ secrets.S3_ACCESSKEY }}
         S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
         JWT_SECRETE: ${{ secrets.JWT_SECRET }}
-      run: ./gradlew build
+      run: |
+        echo DB_URL
+        ./gradlew build
 
     # - name: Docker image build
     #   run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-actions-demo:latest .
