@@ -39,8 +39,8 @@ jobs:
         JWT_SECRETE: ${{ secrets.JWT_SECRET }}
       run: ./gradlew build
 
-    - name: Docker image build
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-actions-demo:latest .
+    # - name: Docker image build
+    #   run: docker build -t ${{ secrets.DOCKER_USERNAME }}/github-actions-demo:latest .
 
     - name: Docker login
       uses: docker/login-action@v2
