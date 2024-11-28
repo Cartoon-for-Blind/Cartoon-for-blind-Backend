@@ -38,7 +38,7 @@ jobs:
         S3_SECRETKEY: ${{ secrets.S3_SECRETKEY }}
         JWT_SECRETE: ${{ secrets.JWT_SECRET }}
       run: |
-        echo DB_URL
+        echo $DB_URL
         ./gradlew build
 
     # - name: Docker image build
